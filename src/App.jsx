@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import CommentSection from './components/CommentSection'
 import CompareBar from './components/CompareBar'
+import NavigationBar from './components/NavigationBar'
 import { useCompare } from './contexts/CompareContext'
 
 // Marka renkleri
@@ -1393,7 +1394,7 @@ const carData = {
       { name: "Highlander", year: "2020-2024", description: "Mid-size SUV", image: "https://via.placeholder.com/400x250/dc2626/ffffff?text=Toyota+Highlander", prices: { new: "4.500.000 - 5.800.000 TL", used: "3.200.000 - 4.500.000 TL" } },
       { name: "Land Cruiser", year: "2021-2024", description: "Full-size SUV", image: "https://via.placeholder.com/400x250/dc2626/ffffff?text=Toyota+Land+Cruiser", prices: { new: "8.000.000 - 12.000.000 TL", used: "6.000.000 - 9.500.000 TL" } },
       { name: "Prius", year: "2016-2024", description: "Compact hybrid hatchback", image: "https://via.placeholder.com/400x250/dc2626/ffffff?text=Toyota+Prius", prices: { new: "2.200.000 - 2.800.000 TL", used: "1.400.000 - 2.000.000 TL" } },
-      { name: "Supra", year: "2019-2024", description: "Sports car coupe", image: "https://via.placeholder.com/400x250/dc2626/ffffff?text=Toyota+Supra", prices: { new: "4.800.000 - 6.200.000 TL", used: "3.800.000 - 5.200.000 TL" } }
+      { name: "Urban Cruiser", year: "2009-2020", description: "Compact hybrid SUV", image: "https://via.placeholder.com/400x250/dc2626/ffffff?text=Toyota+Urban+Cruiser", prices: { new: "-", used: "700.000 - 850.000 TL" } }
     ],
     details: {
       "Yaris": {
@@ -1630,30 +1631,32 @@ const carData = {
           "Hibrit sistem inverter arızası"
         ]
       },
-      "Supra": {
+      "Urban Cruiser": {
         specs: [
-          "Motor: 2.0L-3.0L Turbo (BMW B48/B58)",
-          "Güç: 258-382 HP",
-          "Tork: 400-500 Nm",
-          "Yakıt Tüketimi: 6.5-7.8L/100km",
-          "Şanzıman: 8 İleri Otomatik (ZF)",
-          "0-100 km/h: 4.3-5.2 saniye",
-          "Maksimum Hız: 250 km/h",
-          "Çekiş: Arka Çekiş",
-          "Bagaj Hacmi: 290 litre",
-          "Yakıt Deposu: 52 litre",
-          "CO2 Emisyonu: 148-177 g/km",
-          "Ağırlık: 1.520-1.570 kg"
+          "Motor: 1.5L 4 Silindir + Hibrit Sistem",
+          "Güç: 91-103 HP",
+          "Tork: 122-135 Nm",
+          "Yakıt Tüketimi: 4.8-5.2L/100km",
+          "Şanzıman: CVT Otomatik",
+          "0-100 km/h: 11.2-12.8 saniye",
+          "Maksimum Hız: 170-180 km/h",
+          "Çekiş: Önden Çekiş/AWD",
+          "Bagaj Hacmi: 373 litre",
+          "Yakıt Deposu: 48 litre",
+          "CO2 Emisyonu: 109-118 g/km",
+          "Ağırlık: 1.240-1.320 kg"
         ],
         problems: [
-          "BMW B58 motor zamanlama zinciri aşınması",
-          "ZF 8HP şanzıman adaptasyon sorunu",
-          "BMW iDrive sistemi donma sorunu",
-          "LED matrix far kalibrasyon problemi",
-          "Park asistanı kamera arızası",
-          "Turbo intercooler sızıntı sorunu",
-          "Aktif diferansiyel elektronik kontrol",
-          "Klima kompresörü erken arızası"
+          "Hibrit sistem koordinasyon sorunu",
+          "CVT şanzıman sarsıntı problemi",
+          "Sürücü kapısı kapanma zorluğu",
+          "Panoramik tavan ısı geçirgenliği",
+          "Bluetooth bağlantı kopma sorunu",
+          "İnfotainment sistemi donma problemi",
+          "DPF tıkanma sorunu (dizel versiyonlarda)",
+          "Debriyaj erken aşınması",
+          "Süspansiyon yorgunluğu",
+          "ABS sensör arızaları"
         ]
       }
     }
@@ -5775,12 +5778,15 @@ function App() {
     const modelDetails = carData[selectedBrand].details[selectedModel]
     
     return (
-      <div className="container">
-        <button className="back-button" onClick={handleBackToHome}>
-          ← Ana Sayfaya Dön
-        </button>
-        
-        <div className="model-details">
+      <>
+        <NavigationBar 
+          showBackButton={true}
+          onBackClick={handleBackToHome}
+          backText="← Ana Sayfaya Dön"
+          title={`${selectedBrand} ${selectedModel}`}
+        />
+        <div className="container">
+          <div className="model-details">
           <h2>{selectedBrand} {selectedModel}</h2>
           
           <div className="details-section">
@@ -5804,18 +5810,18 @@ function App() {
           {/* Yorumlar ve Değerlendirmeler Bölümü */}
           <CommentSection modelName={`${selectedBrand} ${selectedModel}`} />
         </div>
-      </div>
+        </div>
+      </>
     )
   }
 
   return (
     <>
+    <NavigationBar 
+      showBackButton={false}
+      title="🚗 Araba Rehberi"
+    />
     <div className="container">
-      <div className="header">
-        <h1>Araba Rehberi</h1>
-        <p>Araba markası ara ve modellerini keşfet</p>
-      </div>
-
       <div className="search-container">
         <input
           type="text"
@@ -5828,6 +5834,15 @@ function App() {
 
       {searchTerm && (
         <div>
+          <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+            <button 
+              className="floating-back-button"
+              onClick={() => setSearchTerm('')}
+              style={{ position: 'relative', margin: '0 auto 20px auto', display: 'inline-block' }}
+            >
+              ← Aramayı Temizle
+            </button>
+          </div>
           {filteredBrands.length > 0 ? (
             filteredBrands.map(brand => (
               <div key={brand}>

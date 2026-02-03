@@ -3,26 +3,39 @@ import React from 'react'
 const NavigationBar = ({ 
   showBackButton = false, 
   onBackClick, 
-  backText = "← Geri Dön",
-  title = null 
+  onHomeClick,
+  backText = "← Geri",
+  title = null,
+  showHomeButton = false
 }) => {
   return (
     <div className="navigation-bar">
       <div className="nav-content">
-        {showBackButton && (
-          <button 
-            className="nav-back-button" 
-            onClick={onBackClick}
-          >
-            {backText}
-          </button>
-        )}
+        <div className="nav-left">
+          {showBackButton && (
+            <button 
+              className="nav-back-button" 
+              onClick={onBackClick}
+            >
+              {backText}
+            </button>
+          )}
+        </div>
         
         {title && (
           <h2 className="nav-title">{title}</h2>
         )}
         
-        <div className="nav-spacer"></div>
+        <div className="nav-right">
+          {showHomeButton && (
+            <button 
+              className="nav-home-button" 
+              onClick={onHomeClick}
+            >
+              🏠 Ana Sayfa
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )
